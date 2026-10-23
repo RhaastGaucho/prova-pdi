@@ -2,6 +2,41 @@
 
 Aplicação local em React + TypeScript + Vite, com CSS puro. O banco contém **44 questões disponíveis** e **6 pendentes**, documentadas em [docs/revisao-questoes.md](docs/revisao-questoes.md).
 
+## Preparar as dependências antes de executar (Linux e Windows)
+
+**Primeiro execute o script de preparação do seu sistema; depois inicie a aplicação.** Os comandos abaixo devem ser executados na pasta `prova-pdi`. Esta seção complementa as instruções originais de execução abaixo; em uma cópia recém-clonada, as dependências precisam ser instaladas.
+
+### Linux (Bash)
+
+```bash
+bash scripts/setup.sh
+export PATH="$PWD/.tools/node/bin:$PATH"
+npm run dev
+```
+
+### Windows (PowerShell)
+
+```powershell
+.\scripts\setup.ps1
+npm.cmd run dev
+```
+
+Se o PowerShell bloquear o script pela política de execução, libere apenas a sessão atual e tente novamente:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\scripts\setup.ps1
+npm.cmd run dev
+```
+
+Os scripts verificam Node.js 22.12+, npm e as dependências de execução e desenvolvimento do projeto. Quando necessário, baixam Node.js 22 com npm do site oficial, verificam o SHA-256 e instalam em `.tools/node`, sem instalação global nem privilégios de administrador. No Linux, a instalação automática do Node atende x64 e ARM64 e requer `curl` ou `wget`, `tar`, `xz` e `sha256sum`; se algum utilitário faltar, o script informa o que instalar pelo gerenciador de pacotes. No Windows, use PowerShell 5.1 ou superior em x64 ou ARM64.
+
+As dependências do projeto são instaladas com `npm ci --include=dev` quando estão ausentes, inválidas ou quando o `package-lock.json` mudou. A primeira preparação também sincroniza as dependências com o lockfile. A instalação requer internet; se falhar, corrija o erro informado antes de iniciar a aplicação. Os scripts podem ser executados novamente para conferir a instalação.
+
+Ao abrir um novo terminal, repita os comandos do seu sistema para preparar o ambiente e iniciar. No Linux, o comando `export PATH=...` disponibiliza o Node local para o terminal atual; no Windows, o script prepara esse caminho na sessão atual automaticamente.
+
+Abra a URL informada pelo Vite, normalmente `http://127.0.0.1:5173/`, e mantenha o terminal aberto. Use `Ctrl+C` para encerrar.
+
 ## Executar
 
 Requer Node.js 22.12+ (testado com 22.19.0) e npm. Na pasta `prova`:
@@ -22,6 +57,39 @@ npm.cmd run preview
 ```
 
 O build está em `dist/`; `preview` normalmente usa `http://127.0.0.1:4173/`. Para instalação reprodutível, use `npm.cmd ci` com o `package-lock.json` fornecido. Sirva `dist/` por HTTP; não abra `index.html` diretamente com `file://`.
+
+## Executar no Linux
+
+Requer Node.js 22.12+ e npm. Confira as versões no terminal:
+
+```bash
+node --version
+npm --version
+```
+
+Na pasta do projeto, instale as dependências e inicie o servidor:
+
+```bash
+cd prova-pdi
+npm ci
+npm run dev
+```
+
+Se o terminal já estiver na pasta `prova-pdi`, pule o comando `cd`. A instalação com `npm ci` requer acesso à internet e usa o `package-lock.json` fornecido.
+
+Abra o endereço informado pelo Vite, normalmente `http://127.0.0.1:5173/`. Mantenha o terminal aberto enquanto usa a aplicação; para encerrar o servidor, pressione `Ctrl+C`. Nas próximas execuções, basta rodar `npm run dev` na pasta do projeto.
+
+No Linux, use `npm` em vez de `npm.cmd`, que é específico do Windows. Se aparecer `vite: command not found`, execute `npm ci` antes de tentar novamente.
+
+Para testar e gerar o build:
+
+```bash
+npm test
+npm run build
+npm run preview
+```
+
+O preview normalmente fica em `http://127.0.0.1:4173/`. Sirva o build por HTTP; não abra `index.html` diretamente com `file://`.
 
 ## Uso e pontuação
 
